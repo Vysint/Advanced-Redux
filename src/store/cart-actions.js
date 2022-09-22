@@ -18,7 +18,10 @@ export const fetchCartData = () => {
     };
     try {
      const cartData =  await fetchData();
-     dispatch(cartActions.replaceCart(cartData));
+     dispatch(cartActions.replaceCart({
+        items: cartData.items || [],
+        totaQuantity: cartData.totalQuantity,
+     }));
     } catch (error) {
       dispatch(
         uiActions.showNotification({
@@ -45,7 +48,10 @@ export const sendCartData = (cart) => {
         "https://food-app-b0e54-default-rtdb.firebaseio.com/cart.json",
         {
           method: "PUT",
-          body: JSON.stringify(cart),
+          body: JSON.stringify({
+            items: cart.items, 
+            totaQuantity: cart.totaQuantity,
+          }),
         }
       );
       if (!response.ok) {
